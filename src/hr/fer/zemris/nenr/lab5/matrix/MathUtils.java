@@ -1,4 +1,4 @@
-package hr.fer.zemris.apr.lab1;
+package hr.fer.zemris.nenr.lab5.matrix;
 
 /**
  * Util for working with <code>double</code> values.

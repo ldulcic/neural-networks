@@ -1,5 +1,4 @@
-package hr.fer.zemris.apr.lab1;
-
+package hr.fer.zemris.nenr.lab5.matrix;
 /**
  * Util class for handling <code>Matrix</code>.
  *

@@ -1,6 +1,4 @@
-package hr.fer.zemris.apr.lab1;
-
-import hr.fer.zemris.apr.lab2.helper.Point;
+package hr.fer.zemris.nenr.lab5.matrix;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -38,6 +36,14 @@ public class Matrix {
         this.height = elements.length;
     }
 
+    public boolean isVector() {
+        return width == 1 || height == 1;
+    }
+
+    public boolean isScalar() {
+        return width == 1 && height == 1;
+    }
+
     /**
      * @param row Index of row where element is.
      * @param column Index of column where element is.
@@ -60,6 +66,17 @@ public class Matrix {
     public void setElement(int row, int column, double element) throws IndexOutOfBoundsException {
         checkIfIndicesValid(row, column);
         elements[row][column] = element;
+    }
+
+    /**
+     * Performs multiplication (dot product) of this matrix with <code>matrix</code>.
+     * This matrix is left multiplier and <code>matrix</code> is right multiplier.
+     *
+     * @param matrix Matrix with which we multiply this matrix.
+     * @return Matrix result of multiplication.
+     */
+    public Matrix dot(Matrix matrix) {
+        return MatrixOperations.multiply(this, matrix);
     }
 
     /**
@@ -109,48 +126,6 @@ public class Matrix {
             }
         }
         return new Matrix(transposed);
-    }
-
-    /**
-     * Returns new matrix which contains values of this matrix in lower triangle, ones on diagonal and zeros in upper
-     * triangle. This method can be useful if this matrix is decomposed and therefore consist of L and U matrices, this
-     * method will return L matrix in that case.
-     *
-     * @throws MatrixUtil.MatrixNotSquareException If this matrix is not square.
-     */
-    public Matrix getL() throws MatrixUtil.MatrixNotSquareException {
-        MatrixUtil.checkIsMatrixSquare(this);
-        Matrix L = new Matrix(width, height);
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
-                if (i == j) {
-                    L.setElement(i, j, 1);
-                } else if (i > j) {
-                    L.setElement(i, j, elements[i][j]);
-                }
-            }
-        }
-        return L;
-    }
-
-    /**
-     * Returns new matrix which contains values of this matrix in upper triangle (including diagonal elements) and zeros
-     * in lower triangle. This method can be useful if this matrix is decomposed and therefore consist of L and U
-     * matrices, this method will return U matrix in that case.
-     *
-     * @throws MatrixUtil.MatrixNotSquareException If this matrix is not square.
-     */
-    public Matrix getU() throws MatrixUtil.MatrixNotSquareException {
-        MatrixUtil.checkIsMatrixSquare(this);
-        Matrix U = new Matrix(width, height);
-        for (int i = 0; i < height; ++i) {
-            for (int j = 0; j < width; ++j) {
-                if (i <= j) {
-                    U.setElement(i, j, elements[i][j]);
-                }
-            }
-        }
-        return U;
     }
 
     /**
@@ -250,16 +225,6 @@ public class Matrix {
             }
         }
         return new Matrix(elements);
-    }
-
-    /**
-     * Creates matrix from point.
-     *
-     * @param point n-dimensional vector.
-     * @return Matrix containing elements from point.
-     */
-    public static Matrix fromPoint(Point point) {
-        return new Matrix(new double[][]{ point.getComponents() }).getTransposed();
     }
 
     /**
