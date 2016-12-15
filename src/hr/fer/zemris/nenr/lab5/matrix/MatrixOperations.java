@@ -26,6 +26,21 @@ public class MatrixOperations {
     }
 
     /**
+     * Adds two matrices in-place, result is stored in <code>first</code> matrix.
+     *
+     * @throws MatrixUtil.IncompatibleMatricesException If matrices <code>first</code> and <code>second</code> don't
+     *                                                  have same dimensions.
+     */
+    public static void addMatricesInplace(Matrix first, Matrix second) throws MatrixUtil.IncompatibleMatricesException {
+        MatrixUtil.checkIfMatricesHaveSameDimensions(first, second);
+        for (int i = 0; i < first.getHeight(); ++i) {
+            for (int j = 0; j < first.getWidth(); ++j) {
+                first.setElement(i, j, first.getElement(i, j) + second.getElement(i, j));
+            }
+        }
+    }
+
+    /**
      * Subtracts two matrices.
      *
      * @return Matrix which is result of subtraction of matrices <code>first</code> and <code>second</code>.
@@ -44,7 +59,22 @@ public class MatrixOperations {
     }
 
     /**
-     * Multiplies matrix with scalar. THis method changes <code>matrix</code> in-place.
+     * Subtracts two matrices in-place, result is stored in <code>first</code> matrix.
+     *
+     * @throws MatrixUtil.IncompatibleMatricesException If matrices <code>first</code> and <code>second</code> don't
+     *                                                  have same dimensions.
+     */
+    public static void subtractMatricesInplace(Matrix first, Matrix second) throws MatrixUtil.IncompatibleMatricesException {
+        MatrixUtil.checkIfMatricesHaveSameDimensions(first, second);
+        for (int i = 0; i < first.getHeight(); ++i) {
+            for (int j = 0; j < first.getWidth(); ++j) {
+                first.setElement(i, j, first.getElement(i, j) - second.getElement(i, j));
+            }
+        }
+    }
+
+    /**
+     * Multiplies matrix with scalar. This method changes <code>matrix</code> in-place.
      *
      * @param matrix Matrix to be multiplied.
      * @param scalar Scalar with which we multiply.

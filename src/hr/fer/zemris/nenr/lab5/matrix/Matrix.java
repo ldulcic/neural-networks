@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class Matrix {
 
+    public enum MatrixAxis {HORIZONTAL, VERTICAL}
+
     private double[][] elements;
     private int width;
     private int height;
@@ -77,6 +79,101 @@ public class Matrix {
      */
     public Matrix dot(Matrix matrix) {
         return MatrixOperations.multiply(this, matrix);
+    }
+
+    /**
+     * Adds this matrix with <code>matrix</code>. Results is store in this matrix. WARNING this method changes matrix.
+     *
+     * @param matrix Matrix with which we add.
+     */
+    public void add(Matrix matrix) {
+        MatrixOperations.addMatricesInplace(this, matrix);
+    }
+
+    /**
+     * Subtracts this matrix with <code>matrix</code>. Results is store in this matrix. WARNING this method changes
+     * matrix.
+     *
+     * @param matrix Matrix with which we subtract.
+     */
+    public void subtract(Matrix matrix) {
+        MatrixOperations.subtractMatricesInplace(this, matrix);
+    }
+
+    /**
+     * Multiplies this matrix with scalar in-place. WARNING this method changes matrix.
+     *
+     * @param scalar Scalar with which we multiply matrix.
+     */
+    public void multiply(double scalar) {
+        MatrixOperations.multiplyWithScalar(this, scalar);
+    }
+
+    /**
+     * Sums elements of matrix based on <code>axis</code> parameter.
+     * If <code>axis</code> is <code>null</code> this method returns sum of all elements in matrix.
+     * If <code>axis</code> is <code>HORIZONTAL</code> this method returns vectors who's elements contain sum of every
+     * row in this matrix.
+     * If <code>axis</code> is <code>VERTICAL</code> this method returns vectors who's elements contain sum of every
+     * column in this matrix.
+     *
+     * @param axis Parameter which defines how to perform summation of matrix elements. Possible values are HORIZONTAL,
+     *             VERTICAL and <code>null</code>.
+     * @return <code>Matrix</code> which is result of summation of matrix element. Can be single values if summation was
+     *          performed over all elements of matrix, or vector if summation was performed over columns or rows.
+     */
+    public Matrix sum(MatrixAxis axis) {
+        return axis == MatrixAxis.HORIZONTAL ? sumHorizontal() :
+                (axis == MatrixAxis.VERTICAL ? sumVertical() : sumAll());
+    }
+
+    /**
+     * Sums all elements in matrix.
+     *
+     * @return Sum of all elements in matrix.
+     */
+    private Matrix sumAll() {
+        double sum = 0;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                sum += elements[i][j];
+            }
+        }
+        return new Matrix(new double[][]{ new double[] { sum } });
+    }
+
+    /**
+     * @return Vector who's elements contain sums of every row in this matrix.
+     */
+    @SuppressWarnings("Duplicates")
+    private Matrix sumHorizontal() {
+        Matrix horizontalSum = new Matrix(1, height);
+        double rowSum;
+        for (int i = 0; i < height; i++) {
+            rowSum = 0;
+            for (int j = 0; j < width; j++) {
+                rowSum += elements[i][j];
+            }
+            horizontalSum.setElement(i, 1, rowSum);
+        }
+        return horizontalSum;
+    }
+
+    /**
+     * @return Vector who's elements contain sums of every column in this matrix.
+     */
+    @SuppressWarnings("Duplicates")
+    private Matrix sumVertical() {
+        Matrix verticalSum = new Matrix(width, 1);
+        double columnSum;
+        for (int i = 0; i < width; i++) {
+            columnSum = 0;
+            for (int j = 0; j < height; j++) {
+                columnSum += elements[j][i];
+            }
+            verticalSum.setElement(i, 1, columnSum);
+        }
+        return verticalSum;
     }
 
     /**
