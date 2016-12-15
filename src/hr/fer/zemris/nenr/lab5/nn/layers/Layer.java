@@ -44,4 +44,11 @@ public interface Layer {
      * @return <code>{@link GradsHolder}</code> which holds weights, biases and its respective gradients.
      */
     GradsHolder backwardParams(Matrix grads);
+
+    class LayerWithNoParametersException extends RuntimeException {
+
+        LayerWithNoParametersException() {
+            super("This layer has no parameters.");
+        }
+    }
 }

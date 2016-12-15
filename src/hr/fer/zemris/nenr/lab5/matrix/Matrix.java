@@ -85,9 +85,11 @@ public class Matrix {
      * Adds this matrix with <code>matrix</code>. Results is store in this matrix. WARNING this method changes matrix.
      *
      * @param matrix Matrix with which we add.
+     * @return this matrix for convenience.
      */
-    public void add(Matrix matrix) {
+    public Matrix add(Matrix matrix) {
         MatrixOperations.addMatricesInplace(this, matrix);
+        return this;
     }
 
     /**
@@ -95,18 +97,22 @@ public class Matrix {
      * matrix.
      *
      * @param matrix Matrix with which we subtract.
+     * @return this matrix for convenience.
      */
-    public void subtract(Matrix matrix) {
+    public Matrix subtract(Matrix matrix) {
         MatrixOperations.subtractMatricesInplace(this, matrix);
+        return this;
     }
 
     /**
      * Multiplies this matrix with scalar in-place. WARNING this method changes matrix.
      *
      * @param scalar Scalar with which we multiply matrix.
+     * @return this matrix for convenience.
      */
-    public void multiply(double scalar) {
+    public Matrix multiply(double scalar) {
         MatrixOperations.multiplyWithScalar(this, scalar);
+        return this;
     }
 
     /**
