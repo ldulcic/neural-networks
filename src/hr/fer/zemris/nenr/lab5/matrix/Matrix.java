@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents two-dimensional array (matrix) which contains double values as basic elements.
@@ -82,13 +83,23 @@ public class Matrix {
     }
 
     /**
+     * Performs element-wise multiplication of matrix values (convolution). WARNING this method changes matrix.
+     *
+     * @param matrix Matrix with which we convolve this matrix.
+     * @return Matrix result of convolution (this matrix).
+     */
+    public Matrix convolve(Matrix matrix) {
+        return MatrixOperations.convolveInPlace(this, matrix);
+    }
+
+    /**
      * Adds this matrix with <code>matrix</code>. Results is store in this matrix. WARNING this method changes matrix.
      *
      * @param matrix Matrix with which we add.
      * @return this matrix for convenience.
      */
     public Matrix add(Matrix matrix) {
-        MatrixOperations.addMatricesInplace(this, matrix);
+        MatrixOperations.addMatricesInPlace(this, matrix);
         return this;
     }
 
@@ -100,7 +111,7 @@ public class Matrix {
      * @return this matrix for convenience.
      */
     public Matrix subtract(Matrix matrix) {
-        MatrixOperations.subtractMatricesInplace(this, matrix);
+        MatrixOperations.subtractMatricesInPlace(this, matrix);
         return this;
     }
 
@@ -116,21 +127,18 @@ public class Matrix {
     }
 
     /**
-     * Sums elements of matrix based on <code>axis</code> parameter.
-     * If <code>axis</code> is <code>null</code> this method returns sum of all elements in matrix.
-     * If <code>axis</code> is <code>HORIZONTAL</code> this method returns vectors who's elements contain sum of every
-     * row in this matrix.
-     * If <code>axis</code> is <code>VERTICAL</code> this method returns vectors who's elements contain sum of every
-     * column in this matrix.
-     *
-     * @param axis Parameter which defines how to perform summation of matrix elements. Possible values are HORIZONTAL,
-     *             VERTICAL and <code>null</code>.
-     * @return <code>Matrix</code> which is result of summation of matrix element. Can be single values if summation was
-     *          performed over all elements of matrix, or vector if summation was performed over columns or rows.
+     * Return maximum value of this matrix.
      */
-    public Matrix sum(MatrixAxis axis) {
-        return axis == MatrixAxis.HORIZONTAL ? sumHorizontal() :
-                (axis == MatrixAxis.VERTICAL ? sumVertical() : sumAll());
+    public double max() {
+        double max = Double.MIN_VALUE;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (elements[i][j] > max) {
+                    max = elements[i][j];
+                }
+            }
+        }
+        return max;
     }
 
     /**
@@ -138,14 +146,31 @@ public class Matrix {
      *
      * @return Sum of all elements in matrix.
      */
-    private Matrix sumAll() {
+    public double sum() {
         double sum = 0;
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 sum += elements[i][j];
             }
         }
-        return new Matrix(new double[][]{ new double[] { sum } });
+        return sum;
+    }
+
+    /**
+     * Sums elements of matrix based on <code>axis</code> parameter.
+     * If <code>axis</code> is <code>HORIZONTAL</code> this method returns vectors who's elements contain sum of every
+     * row in this matrix.
+     * If <code>axis</code> is <code>VERTICAL</code> this method returns vectors who's elements contain sum of every
+     * column in this matrix.
+     *
+     * @param axis Parameter which defines how to perform summation of matrix elements. Possible values are HORIZONTAL
+     *             and VERTICAL.
+     * @return <code>Matrix</code> which is result of summation of matrix element. In case of horizontal summation
+     *          result is column-vector, and in case of vertical summation result is row-vector.
+     */
+    public Matrix sum(MatrixAxis axis) {
+        Objects.requireNonNull(axis);
+        return axis == MatrixAxis.HORIZONTAL ? sumHorizontal() : sumVertical();
     }
 
     /**
@@ -160,7 +185,7 @@ public class Matrix {
             for (int j = 0; j < width; j++) {
                 rowSum += elements[i][j];
             }
-            horizontalSum.setElement(i, 1, rowSum);
+            horizontalSum.setElement(i, 0, rowSum);
         }
         return horizontalSum;
     }
@@ -177,7 +202,7 @@ public class Matrix {
             for (int j = 0; j < height; j++) {
                 columnSum += elements[j][i];
             }
-            verticalSum.setElement(i, 1, columnSum);
+            verticalSum.setElement(0, i, columnSum);
         }
         return verticalSum;
     }

@@ -31,7 +31,7 @@ public class MatrixOperations {
      * @throws MatrixUtil.IncompatibleMatricesException If matrices <code>first</code> and <code>second</code> don't
      *                                                  have same dimensions.
      */
-    public static void addMatricesInplace(Matrix first, Matrix second) throws MatrixUtil.IncompatibleMatricesException {
+    public static void addMatricesInPlace(Matrix first, Matrix second) throws MatrixUtil.IncompatibleMatricesException {
         MatrixUtil.checkIfMatricesHaveSameDimensions(first, second);
         for (int i = 0; i < first.getHeight(); ++i) {
             for (int j = 0; j < first.getWidth(); ++j) {
@@ -64,7 +64,7 @@ public class MatrixOperations {
      * @throws MatrixUtil.IncompatibleMatricesException If matrices <code>first</code> and <code>second</code> don't
      *                                                  have same dimensions.
      */
-    public static void subtractMatricesInplace(Matrix first, Matrix second) throws MatrixUtil.IncompatibleMatricesException {
+    public static void subtractMatricesInPlace(Matrix first, Matrix second) throws MatrixUtil.IncompatibleMatricesException {
         MatrixUtil.checkIfMatricesHaveSameDimensions(first, second);
         for (int i = 0; i < first.getHeight(); ++i) {
             for (int j = 0; j < first.getWidth(); ++j) {
@@ -111,5 +111,87 @@ public class MatrixOperations {
             }
         }
         return result;
+    }
+
+    /**
+     * Performs element-wise multiplication of matrices <code>first</code> and <code>second</code>.
+     *
+     * @return New <code>{@link Matrix}</code> which contains result of this operation.
+     */
+    public static Matrix convolve(Matrix first, Matrix second) {
+        MatrixUtil.checkIfMatricesHaveSameDimensions(first, second);
+        Matrix result = new Matrix(first.getWidth(), first.getHeight());
+        double tmp;
+        for (int i = 0; i < first.getHeight(); i++) {
+            for (int j = 0; j < first.getWidth(); j++) {
+                tmp = first.getElement(i, j) * second.getElement(i, j);
+                result.setElement(i, j, tmp);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Performs element-wise multiplication of matrices <code>first</code> and <code>second</code>.
+     * WARNING this method performs in-place convolution and stores result of this operation in matrix <code>first</code>.
+     *
+     * @return <code>{@link Matrix}</code> which contains result of this operation. Return result is in fact reference
+     *          to matrix <code>first</code> which contains result.
+     */
+    public static Matrix convolveInPlace(Matrix first, Matrix second) {
+        MatrixUtil.checkIfMatricesHaveSameDimensions(first, second);
+        double tmp;
+        for (int i = 0; i < first.getHeight(); i++) {
+            for (int j = 0; j < first.getWidth(); j++) {
+                tmp = first.getElement(i, j) * second.getElement(i, j);
+                first.setElement(i, j, tmp);
+            }
+        }
+        return first;
+    }
+
+    /**
+     * Calculates Frobenius matrix norm. More details https://en.wikipedia.org/wiki/Matrix_norm#Frobenius_norm.
+     *
+     * @param matrix <code>{@link Matrix}</code> who's norm we will compute
+     * @return Norm value of <code>matrix</code>.
+     */
+    public static double norm(Matrix matrix) {
+        double norm = 0;
+        for (int i = 0; i < matrix.getHeight(); i++) {
+            for (int j = 0; j < matrix.getWidth(); j++) {
+                norm += Math.pow(matrix.getElement(i, j), 2);
+            }
+        }
+        return Math.sqrt(norm);
+    }
+
+    /**
+     * Performs <code>operation</code> on every element of <code>matrix</code> and stores result in <code>matrix</code>
+     * in-place. WARNING this method changes <code>matrix</code>.
+     *
+     * @param matrix <code>{@link Matrix}</code> on which we apply <code>operation</code>
+     * @param operation <code>{@link ElementOperation}</code> which we apply to every element of matrix.
+     * @return Reference on <code>matrix</code> for convenience.
+     */
+    public static Matrix elementwiseOperation(Matrix matrix, ElementOperation operation) {
+        double element;
+        for (int i = 0; i < matrix.getHeight(); i++) {
+            for (int j = 0; j < matrix.getWidth(); j++) {
+                element = matrix.getElement(i, j);
+                matrix.setElement(i, j, operation.transform(element));
+            }
+        }
+        return matrix;
+    }
+
+    /**
+     * Interface for applying operations on matrix elements.
+     */
+    public interface ElementOperation {
+        /**
+         * Applies operation tranformation on element <code>x</code> and returns result of operation.
+         */
+        double transform(double x);
     }
 }

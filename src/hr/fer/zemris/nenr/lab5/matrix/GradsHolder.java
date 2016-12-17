@@ -28,4 +28,20 @@ public class GradsHolder {
         weights.subtract(weightGrads);
         bias.subtract(biasGrads);
     }
+
+    public Matrix getWeights() {
+        return weights;
+    }
+
+    public Matrix getWeightGrads() {
+        return weightGrads;
+    }
+
+    public Matrix getBias() {
+        return bias;
+    }
+
+    public Matrix getBiasGrads() {
+        return biasGrads;
+    }
 }

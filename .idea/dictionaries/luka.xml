@@ -2,6 +2,7 @@
   <dictionary name="luka">
     <words>
       <w>backpropagation</w>
+      <w>frobenius</w>
     </words>
   </dictionary>
 </component>

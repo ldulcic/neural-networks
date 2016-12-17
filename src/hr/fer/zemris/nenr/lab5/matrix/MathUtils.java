@@ -7,7 +7,7 @@ package hr.fer.zemris.nenr.lab5.matrix;
  */
 public class MathUtils {
 
-    private static final double EPSILON = 10E-8;
+    private static final double EPSILON = 10E-10;
 
     /**
      * Checks if two double values are approximately equal with respect to some epsilon value.
