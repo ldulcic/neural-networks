@@ -13,7 +13,7 @@ public class MeanSquaredError implements Loss {
     public double forward(Matrix inputs, Matrix outputs) {
         assert outputs.isVector() || outputs.isScalar();
         int n = inputs.getHeight();
-        int loss = 0;
+        double loss = 0;
         double h;
         double y;
         for (int i = 0; i < inputs.getHeight(); i++) {
@@ -29,6 +29,7 @@ public class MeanSquaredError implements Loss {
     @Override
     public Matrix backwardsInputs(Matrix inputs, Matrix outputs) {
         assert outputs.isVector() || outputs.isScalar();
+        Matrix grads = new Matrix(inputs.getWidth(), inputs.getHeight());
         int n = inputs.getHeight();
         double h;
         double y;
@@ -38,9 +39,9 @@ public class MeanSquaredError implements Loss {
                 h = inputs.getElement(i, j);
                 y = outputs.getElement(i, 0);
                 gradient = (1./n) * (h - y);
-                inputs.setElement(i, j, gradient);
+                grads.setElement(i, j, gradient);
             }
         }
-        return inputs;
+        return grads;
     }
 }

@@ -15,14 +15,14 @@ public class FullyConnectedLayer implements Layer {
     private Matrix bias;
     private Matrix inputs;
 
-    public FullyConnectedLayer(int numOfNeurons, int numOfInputs) {
+    public FullyConnectedLayer(int numOfInputs, int numOfNeurons) {
         weights = ParametersInitializer.initializeWeights(numOfNeurons, numOfInputs);
         bias = ParametersInitializer.initializeBias(numOfNeurons);
     }
 
     @Override
     public Matrix forward(Matrix inputs) {
-        this.inputs = inputs;
+        this.inputs = inputs.clone();
         return inputs.dot(weights.getTransposed()).add(getBiasMatrix(inputs.getHeight()));
     }
 
@@ -52,7 +52,15 @@ public class FullyConnectedLayer implements Layer {
     @Override
     public GradsHolder backwardParams(Matrix grads) {
         Matrix weightGrads = grads.getTransposed().dot(inputs);
-        Matrix biasGrads = grads.sum(Matrix.MatrixAxis.HORIZONTAL);
+        Matrix biasGrads = grads.sum(Matrix.MatrixAxis.VERTICAL);
         return new GradsHolder(weights, weightGrads, bias, biasGrads);
+    }
+
+    public Matrix getWeights() {
+        return weights;
+    }
+
+    public Matrix getBias() {
+        return bias;
     }
 }
