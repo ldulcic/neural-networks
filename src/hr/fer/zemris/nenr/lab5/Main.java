@@ -1,12 +1,13 @@
 package hr.fer.zemris.nenr.lab5;
 
 import hr.fer.zemris.nenr.lab5.matrix.Matrix;
-import hr.fer.zemris.nenr.lab5.nn.NeuralNetwork;
+import hr.fer.zemris.nenr.lab5.nn.FeedForwardNeuralNetwork;
 import hr.fer.zemris.nenr.lab5.nn.layers.FullyConnectedLayer;
 import hr.fer.zemris.nenr.lab5.nn.layers.SigmoidLayer;
 import hr.fer.zemris.nenr.lab5.nn.loss.MeanSquaredError;
+import hr.fer.zemris.nenr.lab5.nn.optimization.NeuralNetworkOptimizer;
+import hr.fer.zemris.nenr.lab5.nn.optimization.MiniBatchBackpropagation;
 
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class Main {
@@ -16,15 +17,24 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         loadData();
-        NeuralNetwork nn = new NeuralNetwork.Builder()
+        FeedForwardNeuralNetwork nn = new FeedForwardNeuralNetwork.Builder()
                 .addLayer(new FullyConnectedLayer(1, 100))
                 .addLayer(new SigmoidLayer())
                 .addLayer(new FullyConnectedLayer(100, 4))
                 .addLayer(new SigmoidLayer())
+                .addLayer(new FullyConnectedLayer(4, 4))
+                .addLayer(new SigmoidLayer())
                 .addLayer(new FullyConnectedLayer(4, 1))
-                .loss(new MeanSquaredError())
                 .build();
-        nn.train(inputs, outputs);
+        NeuralNetworkOptimizer optimizer = new MiniBatchBackpropagation.Builder()
+                .neuralNetwork(nn)
+                .loss(new MeanSquaredError())
+                .inputs(inputs)
+                .outputs(outputs)
+                .batchSize(4)
+                .minError(1E-5)
+                .build();
+        optimizer.optimize();
     }
 
     private static void loadData() throws IOException {

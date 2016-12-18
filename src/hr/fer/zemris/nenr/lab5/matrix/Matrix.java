@@ -58,6 +58,11 @@ public class Matrix {
         return elements[row][column];
     }
 
+    public double[] getRow(int index) {
+        checkIfRowValid(index);
+        return elements[index];
+    }
+
     /**
      * Sets value of matrix element at index [row, column].
      *
