@@ -5,6 +5,7 @@
       <w>backpropagation</w>
       <w>dataset</w>
       <w>frobenius</w>
+      <w>softmax</w>
     </words>
   </dictionary>
 </component>

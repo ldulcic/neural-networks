@@ -8,6 +8,7 @@ import hr.fer.zemris.nenr.lab5.nn.layers.FullyConnectedLayer;
 import hr.fer.zemris.nenr.lab5.nn.layers.Layer;
 import hr.fer.zemris.nenr.lab5.nn.layers.SigmoidLayer;
 import hr.fer.zemris.nenr.lab5.nn.loss.MeanSquaredError;
+import hr.fer.zemris.nenr.lab5.nn.loss.SoftmaxWithCrossEntropyLoss;
 
 /**
  * Util class for performing gradient check for neural network layers.
@@ -102,18 +103,34 @@ public class GradientCheck {
         /** MSE LOSS */
         System.out.println("\n\nMSE LOSS:\n");
         x = MatrixUtil.randomNormalMatrix(20, 40);
-        Matrix y = MatrixUtil.randomNormalMatrix(20, 1);
+        final Matrix mseY = MatrixUtil.randomNormalMatrix(20, 1);
         MeanSquaredError mse = new MeanSquaredError();
         Function func = x1 -> {
             Matrix matrix = new Matrix(1, 1);
-            matrix.setElement(0, 0, mse.forward(x1, y));
+            matrix.setElement(0, 0, mse.forward(x1, mseY));
             return matrix;
         };
-        Matrix grad = mse.backwardsInputs(x, y);
+        Matrix grad = mse.backwardsInputs(x, mseY);
         Matrix gradNum = evaluateNumericalGradient(func, x, MatrixUtil.singleValueMatrix(1, 1, 1));
         System.out.println("Relative error = " + relativeError(grad, gradNum));
         System.out.println("Error norm = " + MatrixOperations.norm(grad.subtract(gradNum)));
         /** mse loss */
+
+        /** CROSS ENTROPY LOSS */
+        System.out.println("\n\nSOFTMAX-CROSS-ENTROPY LOSS:\n");
+        x = MatrixUtil.randomNormalMatrix(5, 5);
+        final Matrix sceY = MatrixUtil.randomOneHotMatrix(5, 5);
+        SoftmaxWithCrossEntropyLoss sce = new SoftmaxWithCrossEntropyLoss();
+        func = x1 -> {
+            Matrix matrix = new Matrix(1, 1);
+            matrix.setElement(0, 0, sce.forward(x1, sceY));
+            return matrix;
+        };
+        grad = sce.backwardsInputs(x, sceY);
+        gradNum = evaluateNumericalGradient(func, x, MatrixUtil.singleValueMatrix(1, 1, 1));
+        System.out.println("Relative error = " + relativeError(grad, gradNum));
+        System.out.println("Error norm = " + MatrixOperations.norm(grad.subtract(gradNum)));
+        /** cross entropy loss */
     }
 
     interface Function {

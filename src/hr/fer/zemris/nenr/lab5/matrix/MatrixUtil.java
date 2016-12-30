@@ -50,8 +50,18 @@ public class MatrixUtil {
         return matrix;
     }
 
+    public static Matrix randomOneHotMatrix(int height, int width) {
+        Matrix matrix = new Matrix(width, height);
+        int randIndex;
+        for (int i = 0; i < height; i++) {
+            randIndex = random.nextInt(width);
+            matrix.setElement(i, randIndex, 1);
+        }
+        return matrix;
+    }
+
     /**
-     * Generates matrix of dimensions [<code>height</code>, where every element of matrix has value <code>value</code>.
+     * Generates matrix of dimensions [<code>height</code>, <code>width</code>], where every element of matrix has value <code>value</code>.
      *
      * @param height Height of matrix.
      * @param width Width of matrix.

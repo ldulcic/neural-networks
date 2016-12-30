@@ -31,7 +31,7 @@ public class Main {
                 .loss(new MeanSquaredError())
                 .inputs(inputs)
                 .outputs(outputs)
-                .batchSize(4)
+                .batchSize(1)
                 .minError(1E-5)
                 .build();
         optimizer.optimize();
