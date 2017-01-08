@@ -4,12 +4,14 @@ import hr.fer.zemris.nenr.lab5.matrix.GradsHolder;
 import hr.fer.zemris.nenr.lab5.matrix.Matrix;
 import hr.fer.zemris.nenr.lab5.nn.util.ParametersInitializer;
 
+import java.io.Serializable;
+
 /**
  * Implements fully connected layer of neural network.
  *
  * Created by luka on 12/15/16.
  */
-public class FullyConnectedLayer implements Layer {
+public class FullyConnectedLayer implements Layer, Serializable {
 
     private Matrix weights;
     private Matrix bias;

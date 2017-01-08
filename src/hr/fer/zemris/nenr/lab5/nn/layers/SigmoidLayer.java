@@ -4,6 +4,7 @@ import hr.fer.zemris.nenr.lab5.matrix.GradsHolder;
 import hr.fer.zemris.nenr.lab5.matrix.Matrix;
 import hr.fer.zemris.nenr.lab5.matrix.MatrixUtil;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Objects;
  *
  * Created by luka on 12/15/16.
  */
-public class SigmoidLayer implements Layer {
+public class SigmoidLayer implements Layer, Serializable {
 
     private Matrix inputs;
 

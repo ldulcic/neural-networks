@@ -3,6 +3,7 @@ package hr.fer.zemris.nenr.lab5.matrix;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Objects;
  * <p>
  * Created by luka on 10/21/16.
  */
-public class Matrix {
+public class Matrix implements Serializable {
 
     public enum MatrixAxis {HORIZONTAL, VERTICAL}
 

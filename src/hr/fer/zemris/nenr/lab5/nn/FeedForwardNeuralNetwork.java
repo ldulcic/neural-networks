@@ -4,6 +4,7 @@ import hr.fer.zemris.nenr.lab5.matrix.GradsHolder;
 import hr.fer.zemris.nenr.lab5.matrix.Matrix;
 import hr.fer.zemris.nenr.lab5.nn.layers.Layer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,7 @@ import java.util.Objects;
  *
  * Created by luka on 12/15/16.
  */
-public class FeedForwardNeuralNetwork implements NeuralNetwork {
+public class FeedForwardNeuralNetwork implements NeuralNetwork, Serializable {
 
     private List<Layer> layers;
 
