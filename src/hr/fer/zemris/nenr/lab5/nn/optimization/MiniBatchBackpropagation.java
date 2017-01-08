@@ -10,6 +10,7 @@ import java.util.*;
 /**
  * Implements mini-batch backpropagation optimization of neural network. This method uses only part of dataset (batch)
  * in each iteration of neural network backpropagation. If batch size is 1 this method degrades into stochastic
+ * backpropagation. If batch size is equal to number of examples in dataset this method acts like standard
  * backpropagation.
  *
  * Created by luka on 12/18/16.
@@ -21,6 +22,7 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
     private Matrix inputs;
     private Matrix outputs;
     private Dataset dataset;
+    private double learningRate;
     private int batchSize;
     private int numOfEpoch;
     private double minError;
@@ -30,6 +32,7 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
         this.loss = builder.loss;
         this.inputs = builder.inputs;
         this.outputs = builder.outputs;
+        this.learningRate = builder.learningRate;
         this.batchSize = builder.batchSize;
         this.numOfEpoch = builder.numOfEpoch;
         this.minError = builder.minError;
@@ -67,7 +70,7 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
                 nnGrads = nn.backward(lossGrads);
 
                 for (GradsHolder grads : nnGrads) {
-                    grads.performParameterUpdates();
+                    grads.performParameterUpdates(learningRate);
                 }
             }
         }
@@ -153,6 +156,7 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
         Matrix inputs;
         Matrix outputs;
 
+        double learningRate = 0.01;
         int batchSize = 50;
         int numOfEpoch = Integer.MAX_VALUE;
         double minError = Double.MIN_VALUE;
@@ -174,6 +178,11 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
 
         public Builder outputs(Matrix outputs) {
             this.outputs = outputs;
+            return this;
+        }
+
+        public Builder learningRate(double learningRate) {
+            this.learningRate = learningRate;
             return this;
         }
 
@@ -199,6 +208,9 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
             Objects.requireNonNull(outputs, "outputs == null");
             if (inputs.getHeight() != outputs.getHeight()) {
                 throw new IllegalArgumentException("Number of examples in inputs and outputs don't match.");
+            }
+            if (learningRate <= 0) {
+                throw new IllegalArgumentException("Learning rate must be > 0");
             }
             if (inputs.getHeight() < batchSize) {
                 throw new IllegalArgumentException("Batch size is greater than number of examples in dataset.");

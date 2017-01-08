@@ -21,10 +21,10 @@ public class GradsHolder {
         this.biasGrads = biasGrads;
     }
 
-    public void performParameterUpdates() {
+    public void performParameterUpdates(double learningRate) {
         //TODO implement proper learning rate
-        weightGrads.multiply(0.01);
-        biasGrads.multiply(0.01);
+        weightGrads.multiply(learningRate);
+        biasGrads.multiply(learningRate);
         weights.subtract(weightGrads);
         bias.subtract(biasGrads);
     }
