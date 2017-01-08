@@ -1,6 +1,7 @@
 package hr.fer.zemris.nenr.lab5.nn.loss;
 
 import hr.fer.zemris.nenr.lab5.matrix.Matrix;
+import hr.fer.zemris.nenr.lab5.matrix.MatrixUtil;
 
 /**
  * Implements mean squared error loss function for neural network.
@@ -11,7 +12,7 @@ public class MeanSquaredError implements Loss {
 
     @Override
     public double forward(Matrix inputs, Matrix outputs) {
-        assert outputs.isVector() || outputs.isScalar();
+        MatrixUtil.checkIfMatricesHaveSameDimensions(inputs, outputs);
         int n = inputs.getHeight();
         double loss = 0;
         double h;
@@ -19,16 +20,16 @@ public class MeanSquaredError implements Loss {
         for (int i = 0; i < inputs.getHeight(); i++) {
             for (int j = 0; j < inputs.getWidth(); j++) {
                 h = inputs.getElement(i, j);
-                y = outputs.getElement(i, 0);
-                loss += (1./(2*n)) * Math.pow(h - y, 2);
+                y = outputs.getElement(i, j);
+                loss += Math.pow(h - y, 2);
             }
         }
-        return loss;
+        return (1./(2*n)) * loss;
     }
 
     @Override
     public Matrix backwardsInputs(Matrix inputs, Matrix outputs) {
-        assert outputs.isVector() || outputs.isScalar();
+        MatrixUtil.checkIfMatricesHaveSameDimensions(inputs, outputs);
         Matrix grads = new Matrix(inputs.getWidth(), inputs.getHeight());
         int n = inputs.getHeight();
         double h;
@@ -37,11 +38,11 @@ public class MeanSquaredError implements Loss {
         for (int i = 0; i < inputs.getHeight(); i++) {
             for (int j = 0; j < inputs.getWidth(); j++) {
                 h = inputs.getElement(i, j);
-                y = outputs.getElement(i, 0);
-                gradient = (1./n) * (h - y);
+                y = outputs.getElement(i, j);
+                gradient =  h - y;
                 grads.setElement(i, j, gradient);
             }
         }
-        return grads;
+        return grads.multiply(1./n);
     }
 }

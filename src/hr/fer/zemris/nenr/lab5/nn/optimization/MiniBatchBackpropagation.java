@@ -200,9 +200,6 @@ public class MiniBatchBackpropagation implements NeuralNetworkOptimizer {
             if (inputs.getHeight() != outputs.getHeight()) {
                 throw new IllegalArgumentException("Number of examples in inputs and outputs don't match.");
             }
-            if (!outputs.isVector()) {
-                throw new IllegalArgumentException("Outputs matrix is expected to be column-vector.");
-            }
             if (inputs.getHeight() < batchSize) {
                 throw new IllegalArgumentException("Batch size is greater than number of examples in dataset.");
             }

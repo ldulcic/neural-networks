@@ -103,7 +103,7 @@ public class GradientCheck {
         /** MSE LOSS */
         System.out.println("\n\nMSE LOSS:\n");
         x = MatrixUtil.randomNormalMatrix(20, 40);
-        final Matrix mseY = MatrixUtil.randomNormalMatrix(20, 1);
+        final Matrix mseY = MatrixUtil.randomNormalMatrix(20, 40);
         MeanSquaredError mse = new MeanSquaredError();
         Function func = x1 -> {
             Matrix matrix = new Matrix(1, 1);
