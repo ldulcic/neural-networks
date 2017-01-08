@@ -1,2 +1,3 @@
 # neural_networks
-Java library for creating and training neural networks.
+This library is result of faculty assignment which means it is not optimized or tested properly.
+Latest changes are in develop branch.
